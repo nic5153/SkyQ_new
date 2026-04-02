@@ -40,7 +40,7 @@ def alias_check(df):
 		for alias in aliases:
 			if alias in df.columns:
 				rename_dict[alias] = canonical
-	df.rename(columns=rename_dict)
+	df = df.rename(columns=rename_dict)
 	return df
 
 def check_cols(normalized):
@@ -62,8 +62,6 @@ def make_master():
 		if not ok:
 			print("missing columnns")
 			continue
-		df = read_data(filepath)
-		df.columns = standardize(df.columns)
 		master_list.append(df)
 
 	if len(master_list) == 0:
@@ -77,7 +75,7 @@ def make_master():
 
 def coords_change(master_path):
 	df = pd.read_csv(master_path)
-	mask = df["ra"].astype(str).str.contains(":")
+	mask = df["ra"].astype(str).str.contains(":") | df["dec"].astype(str).str.contains(":")
 	
 	if mask.any():
 		ra = df.loc[mask, "ra"]
