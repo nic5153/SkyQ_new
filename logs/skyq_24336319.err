@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/nimcclur/.conda/envs/nmcclur/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/home/nimcclur/.conda/envs/nmcclur/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/lustre/work/nimcclur/skyq/bin/runscript.py", line 2, in <module>
+    from calc_obs.calc_obs_run import make_observing_plan
+  File "/lustre/work/nimcclur/skyq/calc_obs/calc_obs_run.py", line 5, in <module>
+    from calc_obs.airmass import time_grid, target_summary
+  File "/lustre/work/nimcclur/skyq/calc_obs/airmass.py", line 127
+    "best_time": best_observe_time(times, airmass, altitudes=altitudes, min_alt=min_alt),1~"best_time": best_observe_time(times, airmass, altitudes=altitudes, min_alt=min_alt),
+                                                                                         ^
+SyntaxError: ':' expected after dictionary key

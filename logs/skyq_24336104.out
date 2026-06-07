@@ -1,0 +1,8 @@
+[Wed May 27 14:07:52 CDT 2026] SkyQ started
+Job ID: 24336104
+Node: cpu-8-31
+Project directory: /lustre/scratch/nimcclur/skyq
+Working directory: /lustre/scratch/nimcclur/skyq
+Python executable: /home/nimcclur/.conda/envs/nmcclur/bin/python
+Python version: Python 3.10.19
+[Wed May 27 14:07:56 CDT 2026] SkyQ finished

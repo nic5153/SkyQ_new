@@ -1,0 +1,1 @@
+/home/nimcclur/.conda/envs/nmcclur/bin/python: Error while finding module specification for 'bin.runscript.py' (ModuleNotFoundError: __path__ attribute not found on 'bin.runscript' while trying to find 'bin.runscript.py'). Try using 'bin.runscript' instead of 'bin.runscript.py' as the module name.

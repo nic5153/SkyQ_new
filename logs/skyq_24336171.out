@@ -1,0 +1,18 @@
+[Wed May 27 14:09:35 CDT 2026] SkyQ started
+Job ID: 24336171
+Node: cpu-8-31
+Project directory: /lustre/work/nimcclur/skyq
+Working directory: /lustre/work/nimcclur/skyq
+Python executable: /home/nimcclur/.conda/envs/nmcclur/bin/python
+Python version: Python 3.10.19
+[1/2] Building master table...
+[1/2] Master table complete: 436 targets
+[2/2] Building observing plan...
+[2/2] Observing plan complete: 436 targets
+SkyQ category counts:
+skyq_category
+Secondary         241
+Prime             102
+Non-Observable     93
+SkyQ pipeline complete.
+[Wed May 27 14:15:06 CDT 2026] SkyQ finished
