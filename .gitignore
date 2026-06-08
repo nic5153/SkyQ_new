@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+data/products/
+data/r2_sync_state.json
+data/inbox/
+data/archive/
+data/rejected/
+reports/r2_submissions/
+reports/inbox_report_*.txt
+reports/submissions.csv
+reports/submissions_latest.txt
+reports/skyq_run_*.txt
+reports/skyq_run_latest.txt
+.dev.vars*
+.env*
+node_modules/

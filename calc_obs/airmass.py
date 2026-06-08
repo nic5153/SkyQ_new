@@ -88,6 +88,7 @@ def best_observe_time(times, airmass, altitudes=None, min_alt=30):
 
         return times[best_index].isot
 
+
 def observing_window(times, altitudes, min_alt=30):
         mask = altitudes > min_alt * u.deg
 
@@ -124,5 +125,10 @@ def target_summary(ra, dec, times, min_alt=30):
                 "observable": observable(altitudes, min_alt=min_alt),
                 "window_start": window_start,
                 "window_end": window_end,
-		"best_time": best_observe_time(times, airmass, altitudes=altitudes, min_alt=min_alt),"best_time": best_observe_time(times, airmass, altitudes=altitudes, min_alt=min_alt),
+                "best_time": best_observe_time(
+                        times,
+                        airmass,
+                        altitudes=altitudes,
+                        min_alt=min_alt,
+                ),
         }

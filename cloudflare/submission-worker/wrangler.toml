@@ -1,0 +1,15 @@
+name = "skyq-submission-worker"
+main = "src/worker.js"
+compatibility_date = "2026-06-01"
+workers_dev = true
+
+[[r2_buckets]]
+binding = "SUBMISSIONS"
+bucket_name = "skyq-submissions"
+preview_bucket_name = "skyq-submissions-dev"
+
+[vars]
+MAX_UPLOAD_BYTES = "2097152"
+# Add the public Turnstile site key here after creating a Turnstile widget.
+# Leave blank to run without Turnstile during early testing.
+TURNSTILE_SITE_KEY = ""

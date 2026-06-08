@@ -2,10 +2,14 @@ import numpy as np
 import os
 import pandas as pd
 import glob
+from pathlib import Path
 from astropy.coordinates import SkyCoord
 import astropy.units as u
 
-raw_dir = "/lustre/scratch/nimcclur/skyq/data/raw"
+PROJECT_DIR = Path.cwd()
+raw_dir = PROJECT_DIR / "data" / "raw"
+master_path = PROJECT_DIR / "data" / "master.csv"
+SUPPORTED_SUFFIXES = {".csv", ".tsv", ".txt"}
 
 alias_dict = {
     "name": ["name", "target", "object", "source", "target_name"],
@@ -14,11 +18,20 @@ alias_dict = {
 }
 
 def data_directory():
-	files = glob.glob(f"{raw_dir}/*.txt")
+	files = [
+		str(path) for path in raw_dir.iterdir()
+		if path.is_file() and path.suffix.lower() in SUPPORTED_SUFFIXES
+	]
 	return sorted(files)
 
 def read_data(file):
-	df = pd.read_csv(file, sep = r"\s+")
+	path = Path(file)
+
+	if path.suffix.lower() == ".csv":
+		df = pd.read_csv(path)
+	else:
+		df = pd.read_csv(path, sep = r"\s+")
+
 	return df
 
 def read_columns(file):
@@ -60,17 +73,31 @@ def make_master():
 		normalized = standardize(df.columns)
 		ok = check_cols(normalized)
 		if not ok:
-			print("missing columnns")
+			print(
+				f"[merge] Skipping {os.path.basename(filepath)}: "
+				f"missing required columns. Found columns: {normalized}",
+				flush=True,
+			)
 			continue
 		master_list.append(df)
 
 	if len(master_list) == 0:
-		print("missing master list")
+		print("[merge] No valid target sheets found", flush=True)
 		return
 	master_df = pd.concat(master_list, ignore_index=True)
-	master_path = "/lustre/scratch/nimcclur/skyq/data/master.csv"
+	master_path.parent.mkdir(parents=True, exist_ok=True)
 	master_df.to_csv(master_path, index=False)
 	master_df = coords_change(master_path)
+	rows_before = len(master_df)
+	master_df = master_df.drop_duplicates(subset=["name", "ra", "dec"], keep="first")
+
+	if len(master_df) != rows_before:
+		print(
+			f"[merge] Removed {rows_before - len(master_df)} duplicate targets",
+			flush=True,
+		)
+
+	master_df.to_csv(master_path, index=False)
 	return master_df
 
 def coords_change(master_path):
