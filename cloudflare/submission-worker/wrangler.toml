@@ -13,3 +13,6 @@ MAX_UPLOAD_BYTES = "2097152"
 # Add the public Turnstile site key here after creating a Turnstile widget.
 # Leave blank to run without Turnstile during early testing.
 TURNSTILE_SITE_KEY = ""
+# Comma-separated website origins allowed to submit with fetch().
+# Example: "https://observatory.ttu.edu,https://www.observatory.ttu.edu"
+ALLOWED_ORIGINS = ""

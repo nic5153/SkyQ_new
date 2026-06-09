@@ -125,6 +125,21 @@ def write_operator_report(summary):
                 *observer_product_paths(),
         ])
 
+        publish = summary.get("publish", {})
+        write_section(lines, "Website Publish", [
+                ("Enabled", bool_text(publish.get("enabled"))),
+                ("Published", bool_text(publish.get("published"))),
+                ("Bucket", publish.get("bucket", "")),
+                ("Prefix", publish.get("prefix", "")),
+                ("Source CSV", publish.get("source_path", "")),
+                ("Website CSV", publish.get("website_csv_path", "")),
+                ("Latest key", publish.get("latest_key", "")),
+                ("Archive key", publish.get("archive_key", "")),
+                ("Manifest key", publish.get("manifest_key", "")),
+                ("Product assets uploaded", publish.get("product_assets_uploaded", "")),
+                ("Size bytes", publish.get("size_bytes", "")),
+        ])
+
         error = summary.get("error")
 
         if error:

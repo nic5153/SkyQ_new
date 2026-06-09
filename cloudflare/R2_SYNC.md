@@ -103,3 +103,102 @@ Run:
 ```bash
 python -u -m bin.runscript
 ```
+
+## 6. Publish The Completed Observing Plan To The Website
+
+To update the website after each HPCC run, enable publishing:
+
+```bash
+export SKYQ_ENABLE_R2_PUBLISH=1
+export R2_PUBLISH_PREFIX="published/"
+```
+
+The same R2 credentials used for sync are used for publishing. The pipeline publishes the completed table to:
+
+```text
+published/latest/observing_plan.csv
+published/latest/manifest.json
+published/archive/observing_plan_YYYYMMDDTHHMMSSZ.csv
+published/latest/products/
+```
+
+The Cloudflare Worker serves the latest completed table at:
+
+```text
+https://skyq-submission-worker.nic5153mcclure.workers.dev/observing-plan.csv
+https://skyq-submission-worker.nic5153mcclure.workers.dev/observing-plan-manifest.json
+```
+
+If `data/products/latest/observing_plan_with_products.csv` exists, SkyQ publishes that enriched table. Otherwise it publishes `data/observing_plan.csv`.
+
+The product HTML pages and plots are published under `published/latest/products/` and served by the Worker as:
+
+```text
+https://skyq-submission-worker.nic5153mcclure.workers.dev/products/latest/pages/TARGET.html
+https://skyq-submission-worker.nic5153mcclure.workers.dev/products/latest/altitude_airmass/PLOT.png
+https://skyq-submission-worker.nic5153mcclure.workers.dev/products/latest/sky_path/PLOT.png
+```
+
+The observing plan table links to the per-target HTML page only. That page contains all plots, finding charts, and external catalog links.
+
+## 7. Trigger SkyQ When New Submissions Arrive
+
+Cloudflare R2 cannot directly run `sbatch` on the HPCC cluster, so SkyQ includes an HPCC-side trigger. The trigger checks R2 for new submitted target sheets and submits the normal pipeline only when new files are present.
+
+Run one check manually:
+
+```bash
+python -u -m bin.trigger_skyq
+```
+
+Dry-run a check without submitting:
+
+```bash
+python -u -m bin.trigger_skyq --dry-run
+```
+
+After first cloning SkyQ on the cluster, mark existing R2 submissions as already seen if you do not want old uploads to trigger a fresh run:
+
+```bash
+python -u -m bin.trigger_skyq --mark-seen
+```
+
+Force a submission even if no new files are detected:
+
+```bash
+python -u -m bin.trigger_skyq --force
+```
+
+The trigger submits:
+
+```bash
+sbatch runscript_skyq.sbatch
+```
+
+It will not submit a duplicate if a `skyq` job is already pending or running.
+
+For continuous polling through Slurm:
+
+```bash
+sbatch runscript_skyq_trigger.sbatch
+```
+
+By default, the watcher checks every 300 seconds. To change that interval:
+
+```bash
+export SKYQ_TRIGGER_CHECK_SECONDS=120
+sbatch runscript_skyq_trigger.sbatch
+```
+
+Trigger state is tracked in:
+
+```text
+data/r2_trigger_state.json
+```
+
+Trigger reports are written to:
+
+```text
+reports/trigger_latest.txt
+reports/trigger_YYYYMMDD_HHMMSS.txt
+```
